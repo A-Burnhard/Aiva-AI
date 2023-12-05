@@ -1,3 +1,5 @@
 from django.db import models
 
-# Create your models here.
+class TextData(models.Model):
+    input_text = models.CharField(max_length=10000)
+    processed_text = models.CharField(max_length=10000, null=True, blank=True)
