@@ -1,9 +1,11 @@
 from rest_framework import serializers
-from .models import TextData
+from base.models import Chat
 
 class DataSerializer(serializers.ModelSerializer):
-    input_text = serializers.CharField(max_length=10000)
+    user_message = serializers.CharField(max_length=10000)
+    bot_response = serializers.CharField(max_length=10000)
+
 
     class Meta:
-        model = TextData
-        fields = ('input_text', 'processed_text')
+        model = Chat
+        fields = ('user_message', 'bot_response')

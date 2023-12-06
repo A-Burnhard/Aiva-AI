@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from .serializers import DataSerializer
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
-from .models import TextData
+from base.models import Chat
 
 #Langchain
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -108,13 +108,13 @@ class ChatView(APIView):
         try:
             serializer = DataSerializer(data=request.data)
             if serializer.is_valid():
-                input_text = serializer.validated_data['input_text']
-                response = qa_chain(input_text)
+                user_message = serializer.validated_data['user_message']
+                response = qa_chain(user_message)
                 response = response['result']
-                processed_text = response
+                bot_response = response
 
                 data_instance = serializer.create({
-                    'processed_text': processed_text
+                    'bot_response': bot_response
                 })
 
                 return Response(DataSerializer(data_instance).data)
@@ -127,13 +127,13 @@ class ChatView(APIView):
 
 
 class TestView(generics.CreateAPIView):
-    queryset = TextData.objects.all()
+    queryset = Chat.objects.all()
     serializer_class = DataSerializer
 
     def perform_create(self, serializer):
-        input_text = serializer.validated_data['input_text']
-        response = qa_chain(input_text)
+        user_message = serializer.validated_data['user_message']
+        response = qa_chain(user_message)
         response = response['result']
-        processed_text = response
+        bot_response = response
 
-        serializer.save(processed_text=processed_text)
+        serializer.save(processed_text=bot_response)
