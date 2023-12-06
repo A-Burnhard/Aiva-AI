@@ -4,4 +4,7 @@ from django.views import View
 
 class HomeView(View):
     def get(self, request,):
-        return render(request, 'base/index5.html')
+        return render(request, 'base/home.html')
+    
+    def post(self, request,):
+        pass
