@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,12 +13,11 @@
     <title>Chat-Bot Admin - Dashboard</title>
 
     <!-- Vendors Style-->
-    <link rel="stylesheet" href="css/vendors_css.css">
-
+    <link rel="stylesheet" href="{% static 'css/vendors_css.css' %}"> 
     <!-- Style-->
-    <link rel="stylesheet" href="css/horizontal-menu.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/skin_color.css">
+    <link rel="stylesheet" href="{% static 'css/horizontal-menu.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/skin_color.css' %}"> 
 
 </head>
 
@@ -1137,15 +1137,15 @@
 
 
     <!-- Vendor JS -->
-    <script src="js/vendors.min.js"></script>
-    <script src="js/pages/chat-popup.js"></script>
-    <script src="../assets/icons/feather-icons/feather.min.js"></script>
+    <script src="js/vendors.min.js"></script> {% static '' %}
+    <script src="js/pages/chat-popup.js"></script> {% static '' %}
+    <script src="../assets/icons/feather-icons/feather.min.js"></script> {% static '' %}
 
     <!-- Chat-Bot Admin App -->
-    <script src="js/jquery.smartmenus.js"></script>
-    <script src="js/menus.js"></script>
-    <script src="js/template.js"></script>
-    <script src="js/pages/dashboard5.js"></script>
+    <script src="js/jquery.smartmenus.js"></script> {% static '' %}
+    <script src="js/menus.js"></script> {% static '' %}
+    <script src="js/template.js"></script> {% static '' %}
+    <script src="js/pages/dashboard5.js"></script> {% static '' %}
 
 </body>
 
