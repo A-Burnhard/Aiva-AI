@@ -3272,7 +3272,7 @@
                             <!-- Chat: Files -->
 
                             <!-- Chat: Form -->
-                            <form method="POST" action="{% url 'chatbot' %}" class="chat-form rounded-pill bg-dark"  data-emoji-form="">
+                            <form method="POST" action="{% url 'chatbot' %}" type class="chat-form rounded-pill bg-dark"  data-emoji-form="">
                                 {% csrf_token %}
                                 <div class="row align-items-center gx-0">
                                     <div class="col-auto">
@@ -3295,7 +3295,7 @@
                                     </div>
 
                                     <div class="col-auto">
-                                        <button class="btn btn-icon btn-primary rounded-circle ms-5" onclick ="sendMessage()">
+                                        <button class="btn btn-icon btn-primary rounded-circle ms-5" onclick = "sendMessage()">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                                         </button>
                                     </div>
@@ -4917,6 +4917,8 @@ function getCookie(name) {
 }
 </script>
         <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
         <script src="{% static 'base/assets/js/vendor.js' %}"></script> 
         <script src="{% static 'base/assets/js/template.js' %}"></script> 
     </body>
