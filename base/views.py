@@ -69,12 +69,12 @@ qa_chain = RetrievalQA.from_chain_type(
 
 
 def chatbot_view(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        return render(request, 'base/home.html')
+    elif request.method == 'POST':
         try:
-            # Assuming 'user_message' is the key for the input message in your POST request
             user_message = request.POST.get('user_message')
-
-            # Assuming 'qa_chain' is your existing function for chatbot logic
+            # Perform chatbot logic here and get a response
             response = qa_chain(user_message)
             processed_text = response['result']
 
@@ -83,24 +83,15 @@ def chatbot_view(request):
             if serializer.is_valid():
                 data_instance = serializer.save()
                 return JsonResponse({'response': data_instance.processed_text})
-
             return JsonResponse({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             # Handle the exception, you might want to log it or return a specific error response.
             return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
     else:
         return JsonResponse({'error': 'Invalid request method'})
         
-def chatbot_view(request):
-    if request.method == 'POST':
-        user_message = request.POST.get('user_message')
-        # Perform chatbot logic here and get a response
-        chatbot_response = "This is a sample response."
-        return JsonResponse({'response': chatbot_response})
-    else:
-        return JsonResponse({'error': 'Invalid request method'})
+
 
 
 
