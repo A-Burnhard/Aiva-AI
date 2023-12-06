@@ -76,13 +76,13 @@ def chatbot_view(request):
             user_message = request.POST.get('user_message')
             # Perform chatbot logic here and get a response
             response = qa_chain(user_message)
-            processed_text = response['result']
+            bot_response = response['result']
 
             # Assuming 'DataSerializer' is your existing serializer
-            serializer = DataSerializer(data={'processed_text': processed_text})
+            serializer = DataSerializer(data={'bot_response': bot_response})
             if serializer.is_valid():
                 data_instance = serializer.save()
-                return JsonResponse({'response': data_instance.processed_text})
+                return JsonResponse({'response': data_instance.bot_response})
             return JsonResponse({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:

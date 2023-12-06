@@ -3272,7 +3272,7 @@
                             <!-- Chat: Files -->
 
                             <!-- Chat: Form -->
-                            <form method="POST" action="chatbot" rounded-pill bg-dark  data-emoji-form="">
+                            <form method="POST" action="{% url 'base:chatbot' %}" class="chat-form rounded-pill bg-dark"  data-emoji-form="">
                                 {% csrf_token %}
                                 <div class="row align-items-center gx-0">
                                     <div class="col-auto">
@@ -3283,7 +3283,7 @@
                                         
                                     <div class="col">
                                         <div class="input-group" id="chatbox">
-                                            <textarea class="form-control px-0" id="userInput" placeholder="Type your message..."  rows="1" data-emoji-input="" data-autosize="true"></textarea>
+                                            <textarea class="form-control px-0" name="user_message" type ="text" id="userInput" placeholder="Type your message..."  rows="1" data-emoji-input="" data-autosize="true"></textarea>
 
                                             <a href="#" class="input-group-text text-body pe-0" data-emoji-btn="">
                                                 <span class="icon icon-lg">
@@ -4886,33 +4886,35 @@
                 </div>
             </div>
         </div>
-        <script>
-        function sendMessage() {
-            const userInput = document.getElementById('userInput').value;
-            
-            fetch('/chatbot/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token for POST requests
-                },
-                body: `user_message=${encodeURIComponent(userInput)}`,
-            })
-            .then(response => response.json())
-            .then(data => {
-                const chatbox = document.getElementById('chatbox');
-                chatbox.innerHTML += `<p>User: ${userInput}</p>`;
-                chatbox.innerHTML += `<p>Bot: ${data.response}</p>`;
-            })
-            .catch(error => console.error('Error:', error));
-        }
-        
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
-    </script>
+<script>
+  function sendMessage() {
+    const userInput = document.getElementById('userInput').value;
+
+    const formData = new FormData();
+    formData.append('user_message', userInput);
+
+    fetch('/chatbot/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        const chatbox = document.getElementById('chatbox');
+        chatbox.innerHTML += `<p>User: ${userInput}</p>`;
+        chatbox.innerHTML += `<p>Bot: ${data.response}</p>`;
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+</script>
         <!-- Scripts -->
         <script src="{% static 'base/assets/js/vendor.js' %}"></script> 
         <script src="{% static 'base/assets/js/template.js' %}"></script> 
