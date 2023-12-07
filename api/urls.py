@@ -4,7 +4,6 @@ from django.urls import path
 from api import views
 from api.views import *
 
-app_name = 'api'
 urlpatterns = [
 
     path('', views.ProcessorView.as_view(), name ="main"),

@@ -108,23 +108,20 @@ class ChatView(APIView):
         try:
             serializer = DataSerializer(data=request.data)
             if serializer.is_valid():
-                user_message = serializer.validated_data['user_message']
+                user_message = serializer.validated_data.get('user_message', '')
                 response = qa_chain(user_message)
-                response = response['result']
-                bot_response = response
+                bot_response = response['result']
 
-                data_instance = serializer.create({
-                    'bot_response': bot_response
-                })
+                data_instance = serializer.save(bot_response=bot_response)
 
-                return Response(DataSerializer(data_instance).data)
+                return Response(DataSerializer(data_instance).data, status=status.HTTP_201_CREATED)
 
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            # Handle the exception, you might want to log it or return a specific error response.
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+            # Log the exception for further analysis
+            print("Exception:", str(e))
+            return Response({'error': 'Internal Server Error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class TestView(generics.CreateAPIView):
     queryset = Chat.objects.all()
