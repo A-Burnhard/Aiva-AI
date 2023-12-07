@@ -71,6 +71,7 @@ qa_chain = RetrievalQA.from_chain_type(
 def chatbot_view(request):
     if request.method == 'GET':
         return render(request, 'base/home.html')
+    
     elif request.method == 'POST':
         try:
             user_message = request.POST.get('user_message')
