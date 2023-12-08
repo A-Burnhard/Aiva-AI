@@ -133,4 +133,4 @@ class TestView(generics.CreateAPIView):
         response = response['result']
         bot_response = response
 
-        serializer.save(processed_text=bot_response)
+        serializer.save(bot_response=bot_response)

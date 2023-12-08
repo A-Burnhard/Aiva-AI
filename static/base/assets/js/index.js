@@ -1,6 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', function () {
-    ocument.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
     const sendBtn = document.getElementById("send-btn");
     const userInput = document.getElementById("userInput");
     const chatbox = document.querySelector(".chat-body-inner"); // Define chatbox element
