@@ -6,6 +6,8 @@ from .serializers import DataSerializer
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from base.models import Chat
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 #Langchain
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -103,6 +105,7 @@ class ProcessorView(APIView):
             # Handle exceptions here, you can log the exception for debugging
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+@method_decorator(csrf_exempt, name='dispatch')
 class ChatView(APIView):
     def post(self, request):
         try:

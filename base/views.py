@@ -9,6 +9,8 @@ from api.serializers import DataSerializer
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from .models import Chat
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 #Langchain
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -67,7 +69,7 @@ qa_chain = RetrievalQA.from_chain_type(
     chain_type_kwargs={"prompt": QA_CHAIN_PROMPT},
 )
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 def chatbot_view(request):
     if request.method == 'GET':
         return render(request, 'base/home.html')

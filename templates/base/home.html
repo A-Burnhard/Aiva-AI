@@ -532,32 +532,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- Card --><!-- Card -->
-                                                <div class="card border-0 mt-5">
-                                                    <div class="card-body">
-
-                                                        <div class="row align-items-center gx-5">
-                                                            <div class="col-auto">
-                                                                <div class="avatar avatar-online">
-                                                                    
-                                                                        <img class="avatar-img" src="assets/img/avatars/7.jpg" alt="">
-                                                                    
-                                                                    
-                                                                </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <h5>William Wright</h5>
-                                                                <p>online</p>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox" value="" id="id-member-9">
-                                                                    <label class="form-check-label" for="id-member-9"></label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <label class="stretched-label" for="id-member-9"></label>
-                                                    </div>
-                                                </div>
+                                                
                                                 <!-- Card -->
                                             </nav>
                                         </div>
@@ -1092,7 +1067,7 @@
                                                     <div class="col-auto">
                                                         <div class="avatar avatar-online">
                                                             <img src="assets/img/avatars/7.jpg" alt="#" class="avatar-img">
-                                                        </div>
+                        `                                </div>
                                                     </div>
 
                                                     <div class="col">
@@ -1150,36 +1125,7 @@
                                         </a>
                                         <!-- Card -->
 
-                                        <!-- Card -->
-                                        <a href="chat-direct.html" class="card border-0 text-reset">
-                                            <div class="card-body">
-                                                <div class="row gx-5">
-                                                    <div class="col-auto">
-                                                        <div class="avatar avatar-online">
-                                                            <img src="assets/img/avatars/6.jpg" alt="#" class="avatar-img">
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="col">
-                                                        <div class="d-flex align-items-center mb-3">
-                                                            <h5 class="me-auto mb-0">Ollie Chandler</h5>
-                                                            <span class="text-muted extra-small ms-2">08:45 PM</span>
-                                                        </div>
-
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="line-clamp me-auto">
-                                                                Hello! Yeah, I'm going to meet friend of mine at the departments stores now.
-                                                            </div>
-
-                                                            <div class="badge badge-circle bg-primary ms-5">
-                                                                <span>3</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div><!-- .card-body -->
-                                        </a>
-                                        <!-- Card -->
 
                                         <!-- Card -->
                                         <a href="chat-empty.html" class="card border-0 text-reset">
@@ -2392,8 +2338,8 @@
                                                 </div>
 
                                                 <div class="col overflow-hidden">
-                                                    <h5 class="text-truncate">Bootstrap Community</h5>
-                                                    <p class="text-truncate">35 members, 3 online</p>
+                                                    <h5 class="text-truncate">Nerasol Representative</h5>
+                                                    <p class="text-truncate">online</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -2446,10 +2392,10 @@
 <div class="chat-body hide-scrollbar flex-1 h-100">
     <div class="chat-body-inner">
         <!-- Messages -->
-        <div class="py-6 py-lg-12">
+        <div class="py-6 py-lg-12 message-list">
 
-            <!-- Message (Outgoing) -->
-            <div class="message message-out outgoing">
+            <!-- Message (user-message) -->
+            <div class="message message-out user-message">
                 <a href="#" data-bs-toggle="modal" data-bs-target="#modal-profile" class="avatar avatar-responsive">
                     <img class="avatar-img" src="assets/img/avatars/1.jpg" alt="">
                 </a>
@@ -2460,7 +2406,6 @@
                         <!-- Message Content -->
                         <div class="message-content">
                             <div class="message-text">
-                                <p>SAMPLE Are you? Can you please change the color theme of the website to pink and purple?</p>
                             </div>
                             <!-- Dropdown for Message Actions -->
                             <div class="message-action">
@@ -2490,17 +2435,16 @@
                 </div>
             </div>
 
-            <!-- Message (Incoming) -->
-            <div class="message message-in incoming">
+            <!-- Message (bot-message) -->
+            <div class="message message-in bot-message">
                 <a href="#" data-bs-toggle="modal" data-bs-target="#modal-user-profile" class="avatar avatar-responsive">
                     <img class="avatar-img" src="assets/img/avatars/11.jpg" alt="">
                 </a>
 
-                <div class="message-inner incoming">
+                <div class="message-inner ">
                     <div class="message-body">
                         <div class="message-content">
                             <div class="message-text">
-                                <p>Sample B Can you please change the color theme of the website to pink and purple?</p>
                             </div>
                         </div>
                     </div>
@@ -2509,8 +2453,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Additional Messages... -->
 
         </div>
     </div>
@@ -2531,13 +2473,14 @@
 <div class="chatbox">
     <ul class="chat-messages"></ul>
 
-    <!-- Chat Form -->
+    <!-- Chat Form (user-message input field) -->
     <div class="chat-container">
         <!-- Chat Messages -->
         <ul class="chat-messages"></ul>
     
         <!-- Chat Form -->
         <div class="chat-form rounded-pill bg-dark" data-emoji-form="">
+            
             <div class="row align-items-center gx-0">
                 <div class="col-auto">
                     <a href="#" class="btn btn-icon btn-link text-body rounded-circle" id="dz-btn">
@@ -2564,6 +2507,9 @@
                 </div>
     
                 <div class="col-auto">
+                    
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
+
                     <button class="btn btn-icon btn-primary rounded-circle ms-5" id="send-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send">
                             <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -4161,13 +4107,148 @@
                 </div>
             </div>
         </div>
-<script>
 
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+ <!--J Query Script-->       
+<script>
+$(document).ready(function () {
+    // Function to send a user message to the API
+    function postUserMessage(user_message) {
+        // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint
+        var apiUrl = 'http://127.0.0.1:8000/api/chat/';
+        //var csrfToken = Cookies.get('csrftoken'); 
+        
+        function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+        let csrftoken = getCookie('csrftoken');
+
+        // Make a POST request to the API
+        $.ajax({
+            type: 'POST',
+            url: apiUrl,
+            headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+            },
+            data: JSON.stringify({ user_message: user_message }), 
+            dataType: 'json',
+            contentType: 'application/json',
+            
+            
+            success: function (response) {             
+                //alert(response.bot_response);
+                //bot_message = response
+                // Render the response in the chat
+                renderBotMessage(response.bot_response);
+            },
+            error: function (error) {
+                //alert(JSON.stringify(error));
+                console.error('Error posting message to the API:', error);
+            }
+        });
+    }
+
+    // Function to render a bot message in the chat
+    function renderBotMessage(bot_response) {
+        var chatMessages = $('.chat-messages');
+
+        // Append the bot message to the chat
+        chatMessages.append('<li class="message message-in bot-message">' +
+            '<a href="#" data-bs-toggle="modal" data-bs-target="#modal-user-profile" class="avatar avatar-responsive">' +
+            '<img class="avatar-img" src="assets/img/avatars/11.jpg" alt="">' +
+            '</a>' +
+            '<div class="message-inner">' +
+            '<div class="message-body">' +
+            '<div class="message-content">' +
+            '<div class="message-text">' +
+            '<p>' + bot_response + '</p>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="message-footer">' +
+            '<span class="extra-small text-muted">08:45 PM</span>' +
+            '</div>' +
+            '</div>' +
+            '</li>');
+
+        // Scroll to the bottom of the chat
+        chatMessages.scrollTop(chatMessages[0].scrollHeight);
+    }
+
+    // Event handler for the send button
+    $('#send-btn').click(function () {
+        var userInput = $('#userInput').val();
+
+        // Check if the user input is not empty
+        if (userInput.trim() !== '') {
+            // Render the user message in the chat
+            $('.chat-messages').append('<li class="message message-out user-message">' +
+                '<a href="#" data-bs-toggle="modal" data-bs-target="#modal-profile" class="avatar avatar-responsive">' +
+                '<img class="avatar-img" src="assets/img/avatars/1.jpg" alt="">' +
+                '</a>' +
+                '<div class="message-inner">' +
+                '<div class="message-body">' +
+                '<div class="message-content">' +
+                '<div class="message-text">' +
+                '<p>' + userInput + '</p>' +
+                '</div>' +
+                '<div class="message-action">' +
+                '<div class="dropdown">' +
+                '<a class="icon text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">' +
+                '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">' +
+                '<circle cx="12" cy="12" r="1"></circle>' +
+                '<circle cx="12" cy="5" r="1"></circle>' +
+                '<circle cx="12" cy="19" r="1"></circle>' +
+                '</svg>' +
+                '</a>' +
+                '<ul class="dropdown-menu">' +
+                '<li><a class="dropdown-item" href="#">Edit</a></li>' +
+                '<li><a class="dropdown-item" href="#">Reply</a></li>' +
+                '<li><hr class="dropdown-divider"></li>' +
+                '<li><a class="dropdown-item text-danger" href="#">Delete</a></li>' +
+                '</ul>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="message-footer">' +
+                '<span class="extra-small text-muted">08:45 PM</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</li>');
+
+            // Clear the user input field
+            $('#userInput').val('');
+
+            // Scroll to the bottom of the chat
+            $('.chat-messages').scrollTop($('.chat-messages')[0].scrollHeight);
+
+            // Send the user message to the API
+            postUserMessage(userInput);
+        }
+    });
+});
 </script>
+
+
         <!-- Scripts -->
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="{% static 'base/assets/js/vendor.js' %}"></script> 
         <script src="{% static 'base/assets/js/template.js' %}"></script> 
-        <script src="{% static 'base/assets/js/index.js' %}"></script>
+        <script src="{% static 'base/assets/js/index.jsx' %}"></script>
     </body>
 </html>
