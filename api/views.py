@@ -33,7 +33,7 @@ import requests
 
 # Initialize the OpenAI API client with your API key
 
-openai.api_key = 
+openai.api_key = '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'
 openai_api_key = openai.api_key
 # Get the current date
 current_date = datetime.datetime.now().date()
