@@ -95,7 +95,16 @@ function_description = [{
 
 #TOOLS
  # Assuming you have the requests library installed
-
+tools = [
+    Tool(
+        name='Knowledge Base',
+        func=qa.run,
+        description=(
+            'use this tool when answering general knowledge queries to get '
+            'more information about the topic'
+        )
+    )
+]
 @tool
 def send_sms(number, message):
     """
