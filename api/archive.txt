@@ -9,35 +9,38 @@ from base.models import Chat
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-#Langchainfrom langchain_community.embeddings.openai import OpenAIEmbeddings
+#Langchain
 from langchain_community.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import DocArrayInMemorySearch, Chroma
-from langchain_community.document_loaders import TextLoader, PyPDFLoader
-from langchain.chains import RetrievalQA, ConversationalRetrievalChain
+from langchain_community.vectorstores import DocArrayInMemorySearch
+from langchain_community.document_loaders import TextLoader
+from langchain.chains import RetrievalQA,  ConversationalRetrievalChain
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain_community.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
-from langchain.schema import HumanMessage, AIMessage, ChatMessage
-from langchain.tools import format_tool_to_openai_function, YouTubeSearchTool, MoveFileTool, BaseTool, StructuredTool, tool
-from langchain.agents import ConversationalAgent, Tool, initialize_agent
-from langchain.pydantic_v1 import BaseModel, Field
-import langchain
+from langchain_community.document_loaders import TextLoader
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.tools import format_tool_to_openai_function, tool
+#from langchain.globals import set_llm_cache, get_llm_cache 
+#New
+#from langchain import HumanMessage, AIMessage, ChatMessage
+from langchain_community.tools import format_tool_to_openai_function, YouTubeSearchTool, MoveFileTool
+from langchain_community.vectorstores import Chroma
 import openai
-import json
 import datetime
 import os
-import requests
+import requests 
 
+# Initialize the OpenAI API client with your API key
 
-#SETTING UP QA CHAIN
-openai.api_key = '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'
+openai.api_key = 
 openai_api_key = openai.api_key
-llm = ChatOpenAI(model="gpt-4-0613", openai_api_key=openai.api_key)
+# Get the current date
 current_date = datetime.datetime.now().date()
 
 # Define the date after which the model should be set to "gpt-3.5-turbo"
 target_date = datetime.date(2024, 6, 12)
+
 # Set the model variable based on the current date
 if current_date > target_date:
     llm_model = "gpt-4-0613"
@@ -69,10 +72,41 @@ qa_chain = RetrievalQA.from_chain_type(
 )
 
 
-# CUSTOM FUNCTIONS AND TOOLS
+#Function DEScription
+function_description = [{
+    "name": "send_sms",
+    "description": "Send an SMS to a specified phone number with a given message.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "number": {
+                "type": "string",
+                "description": "The phone number of the recipient (e.g., '0550916600').",
+            },
+            "message": {
+                "type": "string",
+                "description": "The content of the SMS message.",
+            },
+        },
+        "required": ["number", "message"],
+    },
+}
+]
 
+#TOOLS
+ # Assuming you have the requests library installed
+tools = [
+    Tool(
+        name='Knowledge Base',
+        func=qa.run,
+        description=(
+            'use this tool when answering general knowledge queries to get '
+            'more information about the topic'
+        )
+    )
+]
 @tool
-def send_sms(action_input):
+def send_sms(number, message):
     """
     Sends an SMS to the specified phone number with the given message.
 
@@ -83,7 +117,6 @@ def send_sms(action_input):
     Returns:
     - dict: A dictionary containing the result of the SMS sending operation.
     """
-    number, message = action_input.split(",")
     # Construct the payload for the POST request
     payload = {
         "number": number,
@@ -103,60 +136,11 @@ def send_sms(action_input):
     return result
 
 
-tools = [
+#Function calling Implementation
+#Creating Tools
 
-    Tool(
-        name='Nerasol Knowledge Base',
-        func=qa_chain.run,
-        description=(
-            'use this tool when answering questions as a receptionist of Nerasol '
-
-        )
-    ),
-    Tool(
-        name='Send SMS',
-        func=send_sms,  # Assuming your `send_sms` function is defined
-        description='Use this tool to send SMS, providing action input in a "phone number, message format'
-
-    ),
-    
-
-]
-
-#CREATING A CONVERSATIONAL AGENT
-# conversational memory
-conversational_memory = ConversationBufferWindowMemory(
-    memory_key='chat_history',
-    k=5,
-    return_messages=True
-)
-# retrieval qa chain
-qa = RetrievalQA.from_chain_type(
-    llm=llm,
-    chain_type="stuff",
-    retriever=retriever
-)
-
-from langchain.agents import initialize_agent
-
-agent = initialize_agent(
-    agent='chat-conversational-react-description',
-    tools=tools,
-    llm=llm,
-    verbose=True,
-    max_iterations=3,
-    early_stopping_method='generate',
-    memory=conversational_memory
-)
-
-fixed_prompt = '''As a receptionist assistant, I am designed to efficiently manage various administrative tasks and provide assistance to visitors and employees.
-I can handle inquiries about company policies. Extract phone numbers from Nerasol knowledge base and use that phone number to  SMS to the person in question , and provide general information about the organization's services and facilities. My goal is to streamline communication and ensure a positive experience for everyone who interacts with the company.
-While I excel at handling routine inquiries and administrative tasks, please note that I may not be equipped to answer questions outside the scope of receptionist duties. For inquiries related to complex technical issues, company-specific protocols, or sensitive matters, it's advisable to consult with the appropriate department or personnel.
-My capabilities are continually evolving, and I strive to enhance efficiency and effectiveness in providing assistance to both guests and staff members. Whether it's directing visitors to their appointments or assisting employees with administrative tasks, I am here to support the smooth operation of the reception area and contribute to a welcoming and professional environment.
-Please feel free to reach out to me for assistance with reception-related inquiries and tasks. I am committed to delivering prompt and courteous service to meet the needs of our guests and employees.
-'''
-
-agent.agent.llm_chain.prompt.messages[0].prompt.template = fixed_prompt
+send_sms_tool = format_tool_to_openai_function(send_sms)
+#qa_chain.register_tool(send_sms_tool)
 
 
 
@@ -172,8 +156,8 @@ class ChatView(APIView):
             serializer = DataSerializer(data=request.data)
             if serializer.is_valid():
                 user_message = serializer.validated_data.get('user_message', '')
-                response = agent(user_message)
-                bot_response = response['output']
+                response = qa_chain(user_message)
+                bot_response = response['result']
 
                 data_instance = serializer.save(bot_response=bot_response)
 
