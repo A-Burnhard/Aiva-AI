@@ -116,8 +116,8 @@ tools = [
     Tool(
         name='Send SMS',
         func=send_sms,  # Assuming your `send_sms` function is defined
-        description='Use this tool to send SMS, providing action input in a "phone number, message format'
-
+        description='Use this tool to send SMS, providing action input in a "phone number, message" format'
+        #handle_parsing_errors=True
     ),
     
 
