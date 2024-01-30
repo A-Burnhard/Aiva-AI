@@ -13,21 +13,25 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 #Langchain
-from langchain.embeddings.openai import OpenAIEmbeddings
+#Langchainfrom langchain_community.embeddings.openai import OpenAIEmbeddings
+from langchain_community.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
-from langchain.vectorstores import DocArrayInMemorySearch
-from langchain.document_loaders import TextLoader
-from langchain.chains import RetrievalQA,  ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
-from langchain.chat_models import ChatOpenAI
+from langchain_community.vectorstores import DocArrayInMemorySearch, Chroma
+from langchain_community.document_loaders import TextLoader, PyPDFLoader
+from langchain.chains import RetrievalQA, ConversationalRetrievalChain
+from langchain.chains.conversation.memory import ConversationBufferWindowMemory
+from langchain_community.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
-from langchain.document_loaders import TextLoader
-from langchain.document_loaders import PyPDFLoader
-#from langchain.globals import set_llm_cache, get_llm_cache 
-from langchain.vectorstores import Chroma
+from langchain.schema import HumanMessage, AIMessage, ChatMessage
+from langchain.tools import format_tool_to_openai_function, YouTubeSearchTool, MoveFileTool, BaseTool, StructuredTool, tool
+from langchain.agents import ConversationalAgent, Tool, initialize_agent
+from langchain.pydantic_v1 import BaseModel, Field
+import langchain
 import openai
+import json
 import datetime
 import os
+import requests
 
 # Initialize the OpenAI API client with your API key
 
