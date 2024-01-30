@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 #Langchain
 #Langchainfrom langchain_community.embeddings.openai import OpenAIEmbeddings
 from langchain_community.embeddings.openai import OpenAIEmbeddings
-from langchain_community.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
+from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import DocArrayInMemorySearch, Chroma
 from langchain_community.document_loaders import TextLoader, PyPDFLoader
 from langchain.chains import RetrievalQA, ConversationalRetrievalChain
