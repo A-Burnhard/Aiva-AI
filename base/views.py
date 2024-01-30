@@ -6,8 +6,7 @@ from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from api.serializers import DataSerializer
-from langchain.chat_models import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
+
 from .models import Chat
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
