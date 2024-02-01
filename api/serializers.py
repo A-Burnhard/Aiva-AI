@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from base.models import Chat
+from .models import Chat
 
 class DataSerializer(serializers.ModelSerializer):
     user_message = serializers.CharField(max_length=10000, required=False)
