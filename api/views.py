@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from .serializers import DataSerializer
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
-from base.models import Chat
+from .models import Chat
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
