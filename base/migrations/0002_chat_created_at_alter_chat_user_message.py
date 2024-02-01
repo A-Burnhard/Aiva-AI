@@ -2,7 +2,7 @@
 
 import datetime
 from django.db import migrations, models
-from django.utils.timezone import utc
+from pytz import utc
 
 
 class Migration(migrations.Migration):
@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='chat',
             name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=datetime.datetime(2023, 12, 8, 16, 45, 42, 139882, tzinfo=utc)),
+            field=models.DateTimeField(auto_now_add=True, default=datetime.datetime(2023, 12, 8, 16, 45, 42, 139882, tzinfo=pytz.utc)),
             preserve_default=False,
         ),
         migrations.AlterField(
