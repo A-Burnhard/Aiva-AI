@@ -46,7 +46,8 @@ else:
 
 #Internal Data Implementation
 #- Load the data, split it into chunks, and embed it
-loader = PyPDFLoader("data.pdf")
+file_path= loader = "/home/bernard/SR/static/base/assets/js/data.pdf"
+loader = PyPDFLoader(file_path)
 pages = loader.load()
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
 documents = text_splitter.split_documents(pages)
