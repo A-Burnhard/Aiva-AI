@@ -71,8 +71,27 @@ qa_chain = RetrievalQA.from_chain_type(
 )
 
 
-# CUSTOM FUNCTIONS AND TOOLS
+#EXTRACT PHONE NUMBER
+def extract_phone_number(qa_result):
+    """
+    Extracts the phone number from the QA result or database.
 
+    Parameters:
+    - qa_result (str): The result of the QA chain processing.
+
+    Returns:
+    - str: The extracted phone number.
+    """
+    # Extract the phone number from the QA result or database
+    if "phone_number" in qa_result:
+        phone_number = qa_result["phone_number"]
+    else:
+        phone_number = "0550916600"
+
+
+
+
+# CUSTOM FUNCTIONS AND TOOLS
 @tool
 def send_sms(action_input):
     """
@@ -165,7 +184,11 @@ tools = [
         description='Use this tool to send SMS, providing action input in a "phone number, message" format'
         #handle_parsing_errors=True
     ),
-    
+    Tool(
+        name='Extract Employee Phone Number and Send SMS',
+        func=run_qa_extract_sms,
+        description='Use this tool to extract an employee phone number and send an SMS, providing a query as action input'
+    )
 
 ]
 
