@@ -105,22 +105,49 @@ def send_sms(action_input):
     return result
 
 
-#CREATING A CONVERSATIONAL AGENT
+@tool
+def run_qa_extract_sms(action_input):
+    """
+    Run the QA chain to extract a phone number and send an SMS.
+
+    Parameters:
+    - query (str): The query to be processed by the QA chain.
+
+    Returns:
+    - str: The result of the QA chain processing.
+    """
+
+    # Run the QA chain to extract the phone number and message
+    response = qa_chain(action_input)
+    qa_result = response['result']
+
+    #Extract the phone number from the QA result or database
+    phone_number = extract_phone_number(qa_result)
+
+    # Send the SMS using the extracted phone number
+    send_sms(phone_number, message)
+
+
+
+    # Return the result
+    return result
+
+# CREATING A CONVERSATIONAL AGENT
 # conversational memory
 conversational_memory = ConversationBufferWindowMemory(
     memory_key='chat_history',
     k=5,
     return_messages=True
 )
-# retrieval qa chain
+
+# RETRIEVAL QA CHAIN
 qa = RetrievalQA.from_chain_type(
     llm=llm,
     chain_type="stuff",
     retriever=retriever
 )
 
-from langchain.agents import initialize_agent
-
+# TOOLS
 
 tools = [
 
