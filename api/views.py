@@ -46,8 +46,8 @@ else:
 
 #Internal Data Implementation
 #- Load the data, split it into chunks, and embed it
-#file_path= loader = "/home/bernard/SR/static/base/assets/js/data.pdf"
-file_path= "data.pdf"
+file_path= loader = "/home/bernard/SR/static/base/assets/js/data.pdf"
+#file_path= "data.pdf"
 loader = PyPDFLoader(file_path)
 pages = loader.load()
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
@@ -168,7 +168,6 @@ agent.agent.llm_chain.prompt.messages[0].prompt.template = fixed_prompt
 class ChatView(APIView):
     def post(self, request):
         try:
-            print("Request Data:", request.data)
             serializer = DataSerializer(data=request.data)
             if serializer.is_valid():
                 user_message = serializer.validated_data.get('user_message', '')
