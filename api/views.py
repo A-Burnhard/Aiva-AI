@@ -164,19 +164,27 @@ agent.agent.llm_chain.prompt.messages[0].prompt.template = fixed_prompt
 
 
 
-@method_decorator(csrf_exempt, name='dispatch')
+#@method_decorator(csrf_exempt, name='dispatch')
 class ChatView(APIView):
     def post(self, request):
         try:
+            print("Request Data:", request.data)
             serializer = DataSerializer(data=request.data)
             if serializer.is_valid():
                 user_message = serializer.validated_data.get('user_message', '')
-                response = agent(user_message)
-                bot_response = response['output']
 
-                data_instance = serializer.save(bot_response=bot_response)
+                # Generate bot response
+                bot_response = agent(user_message)['output']
 
-                return Response(DataSerializer(data_instance).data, status=status.HTTP_201_CREATED)
+                # Save both user message and bot response
+                data_instance = Chat.objects.create(user_message=user_message)
+
+                # Prepare response data including only the 'output' part of the bot response
+                response_data = {
+                    'output': bot_response
+                }
+
+                return Response(response_data, status=status.HTTP_201_CREATED)
 
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -184,7 +192,8 @@ class ChatView(APIView):
             # Log the exception for further analysis
             print("Exception:", str(e))
             return Response({'error': 'Internal Server Error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+
+
 
 class TestView(generics.CreateAPIView):
     queryset = Chat.objects.all()
@@ -197,6 +206,7 @@ class TestView(generics.CreateAPIView):
         bot_response = response
 
         serializer.save(bot_response=bot_response)
+
 
 
 # Chat Model
@@ -237,3 +247,4 @@ class ProcessorView(APIView):
             # Handle exceptions here, you can log the exception for debugging
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+
