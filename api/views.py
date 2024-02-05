@@ -46,7 +46,8 @@ else:
 
 #Internal Data Implementation
 #- Load the data, split it into chunks, and embed it
-file_path= loader = "/home/bernard/SR/static/base/assets/js/data.pdf"
+#file_path= loader = "/home/bernard/SR/static/base/assets/js/data.pdf"
+file_path= "data.pdf"
 loader = PyPDFLoader(file_path)
 pages = loader.load()
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
@@ -58,11 +59,11 @@ retriever = db.as_retriever(search_type="similarity", search_kwargs={"k": k})
 
 #- Prompt Template
 context= "receptionist"
-template = """As a receptionist of Tech company called Nerasol.Use this context,reply to messages in three sentences or less :{context}.Question: {question} """
+template = """As a receptionist of Nerasol, I'm ready to answer your questions about the company or its services. Please ask me a specific question.{context}.Question: {question} """
 
 #- Define the QA model
 QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
-llm = ChatOpenAI(model_name="gpt-3.5-turbo-0301", openai_api_key=openai_api_key, temperature=0.9)
+llm = ChatOpenAI(model_name="gpt-3.5-turbo-0301", openai_api_key=openai_api_key, temperature=1)
 qa_chain = RetrievalQA.from_chain_type(
     llm,
     retriever=retriever,
@@ -104,6 +105,23 @@ def send_sms(action_input):
     return result
 
 
+#CREATING A CONVERSATIONAL AGENT
+# conversational memory
+conversational_memory = ConversationBufferWindowMemory(
+    memory_key='chat_history',
+    k=5,
+    return_messages=True
+)
+# retrieval qa chain
+qa = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",
+    retriever=retriever
+)
+
+from langchain.agents import initialize_agent
+
+
 tools = [
 
     Tool(
@@ -124,22 +142,6 @@ tools = [
 
 ]
 
-#CREATING A CONVERSATIONAL AGENT
-# conversational memory
-conversational_memory = ConversationBufferWindowMemory(
-    memory_key='chat_history',
-    k=5,
-    return_messages=True
-)
-# retrieval qa chain
-qa = RetrievalQA.from_chain_type(
-    llm=llm,
-    chain_type="stuff",
-    retriever=retriever
-)
-
-from langchain.agents import initialize_agent
-
 agent = initialize_agent(
     agent='chat-conversational-react-description',
     tools=tools,
@@ -158,10 +160,6 @@ Please feel free to reach out to me for assistance with reception-related inquir
 '''
 
 agent.agent.llm_chain.prompt.messages[0].prompt.template = fixed_prompt
-
-
-
-
 
 
 
@@ -186,6 +184,7 @@ class ChatView(APIView):
             # Log the exception for further analysis
             print("Exception:", str(e))
             return Response({'error': 'Internal Server Error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 
 class TestView(generics.CreateAPIView):
     queryset = Chat.objects.all()
