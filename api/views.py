@@ -125,26 +125,28 @@ def send_sms(action_input):
 
 
 @tool
-def run_qa_extract_sms(action_input):
+def run_qa_extract_send_sms(action_input):
     """
-    Run the QA chain to extract a phone number and send an SMS.
-
+    Run the QA chain to extract a phone number of the employee name and send an SMS.
+.
     Parameters:
     - query (str): The query to be processed by the QA chain.
 
     Returns:
     - str: The result of the QA chain processing.
     """
-
-    # Run the QA chain to extract the phone number and message
-    response = qa_chain(action_input)
+    employee_name, message = action_input.split(",")
+    query = f"Extract the phone number of {employee_name}."
+    # Run the QA chain to extract the phone number
+    response = qa_chain(query)
     qa_result = response['result']
 
     #Extract the phone number from the QA result or database
     phone_number = extract_phone_number(qa_result)
 
     # Send the SMS using the extracted phone number
-    send_sms(phone_number, message)
+    send_sms(phone_number, "Hello, this is a test message from the receptionist assistant.")
+
 
 
 
@@ -186,7 +188,7 @@ tools = [
     ),
     Tool(
         name='Extract Employee Phone Number and Send SMS',
-        func=run_qa_extract_sms,
+        func=run_qa_extract_send_sms,
         description='Use this tool to extract an employee phone number and send an SMS, providing a query as action input'
     )
 
