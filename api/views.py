@@ -28,6 +28,7 @@ import json
 import datetime
 import os
 import requests
+import re
 
 
 #SETTING UP QA CHAIN
@@ -46,8 +47,8 @@ else:
 
 #Internal Data Implementation
 #- Load the data, split it into chunks, and embed it
-#file_path= loader = "/home/bernard/SR/static/base/assets/js/data.pdf"
-file_path= "data.pdf"
+file_path= loader = "/home/bernard/SR/static/base/assets/js/data.pdf"
+#file_path= "data.pdf"
 loader = PyPDFLoader(file_path)
 pages = loader.load()
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
@@ -72,21 +73,10 @@ qa_chain = RetrievalQA.from_chain_type(
 
 
 #EXTRACT PHONE NUMBER
-def extract_phone_number(qa_result):
-    """
-    Extracts the phone number from the QA result or database.
-
-    Parameters:
-    - qa_result (str): The result of the QA chain processing.
-
-    Returns:
-    - str: The extracted phone number.
-    """
-    # Extract the phone number from the QA result or database
-    if "phone_number" in qa_result:
-        phone_number = qa_result["phone_number"]
-    else:
-        phone_number = "0550916600"
+def extract_phone_number(text):
+    phone_pattern = r'\b\d{10}\b'  # Assuming phone numbers are 10 digits long
+    phone_numbers = re.findall(phone_pattern, text)
+    return phone_numbers[0] if phone_numbers else None
 
 
 
@@ -166,17 +156,20 @@ def run_qa_extract_send_sms(action_input):
     Returns:
     - str: The result of the QA chain processing.
     """
+    print(action_input)
     employee_name, message = action_input.split(",")
     query = f"Extract the phone number of {employee_name}."
+    print(query)
     # Run the QA chain to extract the phone number
     response = qa_chain(query)
     qa_result = response['result']
+    
 
     #Extract the phone number from the QA result or database
-    phone_number = qa_result["phone_number"] or qa_result
+    phone_number = extract_phone_number(qa_result)
 
     # Send the SMS using the extracted phone number
-    result =send_sms_to_employee_number(phone_number, message)
+    result=send_sms_to_employee_number(phone_number, message)
 
     # Return the result
     return result
@@ -218,7 +211,7 @@ tools = [
     Tool(
         name='Extract Employee Phone Number and Send SMS',
         func=run_qa_extract_send_sms,
-        description='Use this tool to extract an employee phone number and send an SMS, providing a query as action input'
+        description='Use this tool to extract the phone number of an employee and send an SMS, providing action input in this exact format example "Appiedu Bernard, Please come here" '
     )
 
 ]
