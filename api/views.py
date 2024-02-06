@@ -46,8 +46,8 @@ else:
 
 #Internal Data Implementation
 #- Load the data, split it into chunks, and embed it
-file_path= loader = "/home/bernard/SR/static/base/assets/js/data.pdf"
-#file_path= "data.pdf"
+#file_path= loader = "/home/bernard/SR/static/base/assets/js/data.pdf"
+file_path= "data.pdf"
 loader = PyPDFLoader(file_path)
 pages = loader.load()
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
@@ -124,6 +124,37 @@ def send_sms(action_input):
     return result
 
 
+#FUNCTION TO SEND SMS USING EXTRACTED PHONE NUMBER
+def send_sms_to_employee_number(phone_number, message):
+    """
+    Sends an SMS to the specified phone number with the given message.
+
+    Parameters:
+    - phone_number (str): The phone number of the recipient (e.g., "0550916600").
+    - message (str): The content of the SMS.
+
+    Returns:
+    - dict: A dictionary containing the result of the SMS sending operation.
+    """
+    # Construct the payload for the POST request
+    payload = {
+        "number": phone_number,
+        "message": message,
+    }
+
+    # Make a POST request to the specified URL
+    url = "https://laws.adudor.com/api/fire-sms"
+    response = requests.post(url, json=payload)
+
+    # Return the result as a dictionary
+    result = {
+        "status_code": response.status_code,
+        "response_content": response.json() if response.headers['content-type'] == 'application/json' else response.text,
+    }
+
+    return result
+
+
 @tool
 def run_qa_extract_send_sms(action_input):
     """
@@ -142,16 +173,14 @@ def run_qa_extract_send_sms(action_input):
     qa_result = response['result']
 
     #Extract the phone number from the QA result or database
-    phone_number = extract_phone_number(qa_result)
+    phone_number = qa_result["phone_number"] or qa_result
 
     # Send the SMS using the extracted phone number
-    send_sms(phone_number, "Hello, this is a test message from the receptionist assistant.")
-
-
-
+    result =send_sms_to_employee_number(phone_number, message)
 
     # Return the result
     return result
+
 
 # CREATING A CONVERSATIONAL AGENT
 # conversational memory
