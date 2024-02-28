@@ -19,7 +19,7 @@ from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain_community.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.schema import HumanMessage, AIMessage, ChatMessage
-from langchain.tools import format_tool_to_openai_function, YouTubeSearchTool, MoveFileTool, BaseTool, StructuredTool, tool
+from langchain.tools import format_tool_to_openai_function, BaseTool, StructuredTool, tool
 from langchain.agents import ConversationalAgent, Tool, initialize_agent
 from langchain.pydantic_v1 import BaseModel, Field
 import langchain
@@ -31,13 +31,14 @@ import requests
 import re
 
 
-#SETTING UP QA CHAIN
-openai.api_key = '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'
-openai_api_key = openai.api_key
+#--SETTING UP QA CHAIN
+
+#- OpenAI API Key
+openai_api_key = os.getenv('OPENAI_API_KEY')
 llm = ChatOpenAI(model="gpt-4-0613", openai_api_key=openai.api_key)
 current_date = datetime.datetime.now().date()
 
-# Define the date after which the model should be set to "gpt-3.5-turbo"
+#-Define the date after which the model should be set to "gpt-3.5-turbo"
 target_date = datetime.date(2024, 6, 12)
 # Set the model variable based on the current date
 if current_date > target_date:
@@ -47,8 +48,8 @@ else:
 
 #Internal Data Implementation
 #- Load the data, split it into chunks, and embed it
-file_path= loader = "/home/bernard/SR/static/base/assets/js/data.pdf"
-#file_path= "data.pdf"
+#file_path= loader = "/home/bernard/SR/static/base/assets/js/data.pdf"
+file_path= "data.pdf"
 loader = PyPDFLoader(file_path)
 pages = loader.load()
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
