@@ -83,6 +83,7 @@ def extract_phone_number(text):
 
 
 # CUSTOM FUNCTIONS AND TOOLS
+sms_url = os.getenv('URL')
 @tool
 def send_sms(action_input):
     """
@@ -103,7 +104,7 @@ def send_sms(action_input):
     }
 
     # Make a POST request to the specified URL
-    url = "https://laws.adudor.com/api/fire-sms"
+    url = sms_url
     response = requests.post(url, json=payload)
 
     # Return the result as a dictionary
@@ -134,7 +135,7 @@ def send_sms_to_employee_number(phone_number, message):
     }
 
     # Make a POST request to the specified URL
-    url = "https://laws.adudor.com/api/fire-sms"
+    url = sms_url
     response = requests.post(url, json=payload)
 
     # Return the result as a dictionary
