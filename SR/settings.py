@@ -34,7 +34,6 @@ INSTALLED_APPS = [
     'rest_framework',
    'corsheaders',
     'api.apps.ApiConfig',
-    'bot.apps.BotConfig',
 ]
 
 MIDDLEWARE = [
