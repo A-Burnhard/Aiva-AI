@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-   'corsheaders',
+    'corsheaders',
     'api.apps.ApiConfig',
 ]
 
@@ -71,7 +71,7 @@ WSGI_APPLICATION = 'SR.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
 
 DATABASES = {
     'default': {
