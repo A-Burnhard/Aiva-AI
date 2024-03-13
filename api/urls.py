@@ -10,6 +10,4 @@ urlpatterns = [
     path('chat/', views.ChatView.as_view(), name ="chat"),
     path('test/', views.TestView.as_view(), name ="test"),
 
-
-
 ]
